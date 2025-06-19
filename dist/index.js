@@ -40,6 +40,45 @@ class ForgeGithub extends forgescript_1.ForgeExtension {
                 case "pull_request":
                     this.emitter.emit("pull_request", payload);
                     break;
+                case "create":
+                    this.emitter.emit("create", payload);
+                    break;
+                case "delete":
+                    this.emitter.emit("delete", payload);
+                    break;
+                case "repository":
+                    this.emitter.emit("repository", payload);
+                    break;
+                case "label":
+                    this.emitter.emit("label", payload);
+                    break;
+                case "milestone":
+                    this.emitter.emit("milestone", payload);
+                    break;
+                case "project":
+                    this.emitter.emit("project", payload);
+                    break;
+                case "project_card":
+                    this.emitter.emit("project_card", payload);
+                    break;
+                case "fork":
+                    this.emitter.emit("fork", payload);
+                    break;
+                case "watch":
+                    this.emitter.emit("watch", payload);
+                    break;
+                case "issue_comment":
+                    this.emitter.emit("issue_comment", payload);
+                    break;
+                case "pull_request_review":
+                    this.emitter.emit("pull_request_review", payload);
+                    break;
+                case "discussion":
+                    this.emitter.emit("discussion", payload);
+                    break;
+                case "issues":
+                    this.emitter.emit("issues", payload);
+                    break;
                 default:
                     console.warn(`[ForgeGithub] Unknown event received: ${event}`);
             }
