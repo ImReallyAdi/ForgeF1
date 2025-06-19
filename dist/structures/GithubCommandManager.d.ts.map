@@ -1,0 +1,1 @@
+{"version":3,"file":"GithubCommandManager.d.ts","sourceRoot":"","sources":["../../src/structures/GithubCommandManager.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,kBAAkB,EAAE,MAAM,uBAAuB,CAAC;AAC3D,OAAO,EAAE,aAAa,EAAE,MAAM,uBAAuB,CAAC;AAGtD,qBAAa,oBAAqB,SAAQ,kBAAkB,CAC1D,MAAM,aAAa,CACpB;IACC,WAAW,SAA0B;CACtC"}
