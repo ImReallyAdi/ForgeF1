@@ -64,8 +64,11 @@ class ForgeGithub extends forgescript_1.ForgeExtension {
                 case "fork":
                     this.emitter.emit("fork", payload);
                     break;
-                case "watch":
-                    this.emitter.emit("watch", payload);
+                case "star":
+                    this.emitter.emit("star", payload);
+                    break;
+                case "release":
+                    this.emitter.emit("release", payload);
                     break;
                 case "issue_comment":
                     this.emitter.emit("issue_comment", payload);
