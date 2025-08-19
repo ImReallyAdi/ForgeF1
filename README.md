@@ -2,20 +2,20 @@
 
 An unofficial ForgeScript extension to **listen to GitHub Webhook events** such as `push`, `pull_request`, and more.
 
-## :package: Features
+## Features
 
-- :white_check_mark: Supports GitHub Webhooks natively
-- :mag: Access payloads with enums like `$newPush[property]` and `$newPullRequest[property]`
-- :jigsaw: Command system to handle GitHub events inside ForgeScript
-- :rocket: Perfect for CI updates, project changelogs, or contributor automation
+- Supports GitHub Webhooks natively
+- Access payloads with enums like `$newPush[property]` and `$newPullRequest[property]`
+- Command system to handle GitHub events inside ForgeScript
+- Perfect for CI updates, project changelogs, or contributor automation
 
-## :gear: Installation
+## Installation
 
 ```bash
 npm install github:Clyders/ForgeGithub#dev
-````
+```
 
-## :test_tube: Usage Example
+## Usage Example
 
 ### 1. Extend Your Client
 
@@ -51,7 +51,7 @@ $newPullRequest[pull_request.title] // => "Added new thingy"
 
 ---
 
-## :brain: Functions
+## Functions
 
 | Function                    | Description                                          |
 | ----------------------------|------------------------------------------------------|
@@ -79,14 +79,14 @@ $newPullRequest[pull_request.title] // => "Added new thingy"
 
 ---
 
-## :shield: Requirements
+## Requirements
 
 * Node.js 18+
 * Public port (you can use [Ngrok](https://ngrok.com) for local testing)
 
 ---
 
-## :handshake: Contribution
+## Contribution
 
 * Open issues or PRs for suggestions
 * Custom event ideas welcome!
