@@ -1,92 +1,74 @@
-# ForgeGithub
+# ForgeScript F1 Events
 
-An unofficial ForgeScript extension to **listen to GitHub Webhook events** such as `push`, `pull_request`, and more.
+This extension provides Formula 1 racing data and events for ForgeScript.
 
 ## Features
 
-- Supports GitHub Webhooks natively
-- Access payloads with enums like `$newPush[property]` and `$newPullRequest[property]`
-- Command system to handle GitHub events inside ForgeScript
-- Perfect for CI updates, project changelogs, or contributor automation
+* Race weekend schedules
+* Race results
+* Qualifying results
+* Driver standings
+* Constructor standings
 
 ## Installation
 
 ```bash
-npm install github:Clyders/ForgeGithub#dev
+npm install @
 ```
 
-## Usage Example
+## Usage
 
-### 1. Extend Your Client
+```typescript
+const { ForgeF1 } = require("@");
 
-```js
-const { ForgeGithub } = require("@tryforge/forge.github");
-
-const client = new ForgeClient({
-...
-extensions: [
-new ForgeGithub({
-  port: 80
-})
-],
-});
+// Initialize the F1 extension
+client.loadEtryforge/forge.f1xtension(
+  new ForgeF1({
+    updateInterval: 60000, // Update every minute
+    events: ["raceWeekend", "raceResult", "qualifying", "driverStanding", "constructorStanding"]
+  })
+);
 ```
 
-### 2. Create a GitHub Webhook
+## Events
 
-* Go to your GitHub repo → Settings → Webhooks
-* Set URL: `https://your-public-url/github`
-* Content type: `application/json`
-* Select events: `Push`, `Pull Request`, or all
-* Save
+### Race Weekend
+Triggered when a race weekend is approaching or ongoing. Includes:
+- Circuit information
+- Schedule for practice sessions, qualifying, and race
+- Sprint race schedule (if applicable)
 
-### 3. Use Functions in ForgeScript
+### Race Results
+Triggered after a race is completed. Includes:
+- Full race results
+- Driver positions
+- Points scored
+- Fastest laps
+- DNF information
 
-```js
-$newPush[head_commit.message] // => "test"
-$newPullRequest[pull_request.title] // => "Added new thingy"
-```
+### Qualifying Results
+Triggered after qualifying sessions. Includes:
+- Q1, Q2, and Q3 times
+- Final grid positions
+- Constructor information
 
-> These functions only work right after receiving a GitHub event.
+### Driver Standings
+Triggered when driver standings are updated. Includes:
+- Current position
+- Points
+- Number of wins
+- Driver details
 
----
+### Constructor Standings
+Triggered when constructor standings are updated. Includes:
+- Current position
+- Points
+- Number of wins
+- Constructor details
 
-## Functions
+## Data Source
+This extension uses the [Ergast Motor Racing Developer API](http://ergast.com/mrd/) to fetch Formula 1 data. The API is free to use and does not require authentication.
 
-| Function                    | Description                                          |
-| ----------------------------|------------------------------------------------------|
-| `$newPush[property]`        | Get data from latest push event payload              |
-| `$newPullRequest[property]` | Get data from latest pull request event              |
-| `$pushCommitCount`          | Get count of commits in the latest push event        |
-| `$githubEventType`          | Get type of the latest GitHub event                  |
-| `$newCreate[property]`      | Get data from branch/tag creation event              |
-| `$newDelete[property]`      | Get data from branch/tag deletion event              |
-| `$newRepository[property]`  | Get data from repository changes (e.g., rename)      |
-| `$newLabel[property]`       | Get data from label created/edited/deleted event     |
-| `$newMilestone[property]`   | Get data from milestone opened/closed event          |
-| `$newProject[property]`     | Get data from project created/updated/deleted event  |
-| `$newProjectCard[property]` | Get data from project card moved/updated event       |
-| `$newFork[property]`        | Get data from fork event                             |
-| `$newWatch[property]`       | Get data from watch (subscription) event             |
-| `$newComment[property]`     | Get data from issue comment event                    |
-| `$newPRReview[property]`    | Get data from pull request review event              |
-| `$newCommit[property]`      | Get data from a new commit in push events            |
-| `$newDiscussion[property]`  | Get data from discussion event                       |
-| `$newIssue[property]`       | Get data from issue creation/modification event      |
-| `$newPullRequest[property]` | Get data from new pull request event                 |
+# Still in progess btw!
 
-> Each of these functions corresponds to a GitHub event of the same name, ensuring consistency between event triggers and their respective handlers.
-
----
-
-## Requirements
-
-* Node.js 18+
-* Public port (you can use [Ngrok](https://ngrok.com) for local testing)
-
----
-
-## Contribution
-
-* Open issues or PRs for suggestions
-* Custom event ideas welcome!
+## made w/ love adi

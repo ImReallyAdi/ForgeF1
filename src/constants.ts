@@ -1,1 +1,1 @@
-export const GithubEventManagerName = "forge.github.events";
+export const F1EventManagerName = "forge.f1.events";

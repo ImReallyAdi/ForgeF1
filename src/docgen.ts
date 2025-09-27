@@ -1,10 +1,10 @@
 import { generateMetadata } from "@tryforge/forgescript";
-import { GithubEventManagerName } from "./constants";
+import { F1EventManagerName } from "./constants";
 
 generateMetadata(
   __dirname + "/functions",
   "functions",
-  GithubEventManagerName,
+  F1EventManagerName,
   undefined,
   undefined,
   __dirname + "/events",

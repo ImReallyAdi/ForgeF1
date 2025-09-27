@@ -1,26 +1,30 @@
 {
-  "name": "@tryforge/forge.github",
+  "name": "@tryforge/forge.f1",
   "version": "1.0.0",
-  "description": "",
+  "description": "Formula 1 extension for ForgeScript",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "docgen": "tsc && node dist/docgen",
-    "prepare": "prettier src -w && tsc"
+    "build": "tsc",
+    "dev": "tsc -w",
+    "clean": "rimraf dist",
+    "prepare": "npm run clean && npm run build",
+    "test": "echo \"No tests specified\" && exit 0",
+    "prepublishOnly": "npm run prepare"
   },
   "keywords": [
-    "github",
-    "git.hub",
+    "f1",
+    "formula1",
+    "racing",
     "forgescript",
     "fs",
     "sdk",
-    "api",
-    "webhook"
+    "api"
   ],
   "author": "Clyders",
   "license": "GPL-3.0-only",
   "dependencies": {
-    "@tryforge/webserver": "^1.0.2",
+    "axios": "^1.6.0",
     "prettier": "^3.5.3",
     "tiny-typed-emitter": "^2.1.0"
   },
