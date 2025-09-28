@@ -75,161 +75,233 @@ class ForgeF1 extends forgescript_1.ForgeExtension {
             const { default: axios } = await Promise.resolve().then(() => __importStar(require("axios")));
             const currentDate = new Date();
             const currentSeason = currentDate.getFullYear();
-            const ergastApi = axios.create({
-                baseURL: "http://ergast.com/api/f1",
-                params: {
-                    limit: 1000
-                }
+            const api = axios.create({
+                baseURL: "https://f1api.dev/api",
             });
             // Helper function to make API calls
             const fetchData = async (endpoint) => {
-                const response = await ergastApi.get(`${endpoint}.json`);
+                const response = await api.get(endpoint);
                 return response.data;
             };
-            // 1. Get current race schedule
-            const schedule = await fetchData(`/${currentSeason}`);
-            const races = schedule.MRData.RaceTable.Races;
-            const nextRace = races.find((race) => {
-                const raceDate = new Date(`${race.date}T${race.time || "00:00:00Z"}`);
-                return raceDate > currentDate;
-            });
-            if (nextRace) {
+            // 1. Get next race
+            const nextRaceData = await fetchData("/races/next");
+            if (nextRaceData && nextRaceData.circuit) {
                 this.emitter.emit("raceWeekend", {
                     circuit: {
-                        circuitId: nextRace.Circuit.circuitId,
-                        name: nextRace.Circuit.circuitName,
-                        location: nextRace.Circuit.Location.locality,
-                        country: nextRace.Circuit.Location.country,
-                        lat: parseFloat(nextRace.Circuit.Location.lat),
-                        lng: parseFloat(nextRace.Circuit.Location.long)
+                        circuitId: nextRaceData.circuit.id,
+                        name: nextRaceData.circuit.name,
+                        location: nextRaceData.circuit.location,
+                        country: nextRaceData.circuit.country,
+                        lat: parseFloat(nextRaceData.circuit.lat),
+                        lng: parseFloat(nextRaceData.circuit.lng)
                     },
                     schedule: {
-                        fp1: nextRace.FirstPractice?.date || "",
-                        fp2: nextRace.SecondPractice?.date || "",
-                        fp3: nextRace.ThirdPractice?.date || "",
-                        qualifying: nextRace.Qualifying?.date || "",
-                        sprint: nextRace.Sprint?.date,
-                        race: nextRace.date
+                        fp1: nextRaceData.sessions?.fp1 || "",
+                        fp2: nextRaceData.sessions?.fp2 || "",
+                        fp3: nextRaceData.sessions?.fp3 || "",
+                        sprint: nextRaceData.sessions?.sprint || undefined,
+                        qualifying: nextRaceData.sessions?.qualifying || "",
+                        race: nextRaceData.date || ""
                     }
                 });
-            }
-            // 2. Get latest race results
-            const lastRoundIndex = races.findIndex((race) => {
-                const raceDate = new Date(`${race.date}T${race.time || "00:00:00Z"}`);
-                return raceDate < currentDate;
-            }) - 1;
-            if (lastRoundIndex >= 0) {
-                const lastRound = races[lastRoundIndex].round;
-                const raceResults = await fetchData(`/${currentSeason}/${lastRound}/results`);
-                const lastRace = raceResults.MRData.RaceTable.Races[0];
-                if (lastRace) {
-                    this.emitter.emit("raceResult", {
-                        season: currentSeason,
-                        round: parseInt(lastRace.round),
-                        raceName: lastRace.raceName,
-                        circuit: {
-                            circuitId: lastRace.Circuit.circuitId,
-                            name: lastRace.Circuit.circuitName,
-                            location: lastRace.Circuit.Location.locality,
-                            country: lastRace.Circuit.Location.country,
-                            lat: parseFloat(lastRace.Circuit.Location.lat),
-                            lng: parseFloat(lastRace.Circuit.Location.long)
-                        },
-                        results: lastRace.Results.map((result) => ({
-                            position: parseInt(result.position),
-                            driver: {
-                                driverId: result.Driver.driverId,
-                                code: result.Driver.code,
-                                firstName: result.Driver.givenName,
-                                lastName: result.Driver.familyName,
-                                nationality: result.Driver.nationality,
-                                permanentNumber: result.Driver.permanentNumber
-                            },
-                            constructor: {
-                                constructorId: result.Constructor.constructorId,
-                                name: result.Constructor.name,
-                                nationality: result.Constructor.nationality
-                            },
-                            points: parseFloat(result.points),
-                            status: result.status,
-                            time: result.Time?.time,
-                            fastestLap: result.FastestLap ? {
-                                time: result.FastestLap.Time.time,
-                                lap: parseInt(result.FastestLap.lap)
-                            } : undefined
-                        }))
-                    });
-                    // 3. Get driver standings
-                    const driverStandingsData = await fetchData(`/${currentSeason}/driverStandings`);
-                    const driverStandings = driverStandingsData.MRData.StandingsTable.StandingsLists[0]?.DriverStandings || [];
-                    driverStandings.forEach((standing) => {
-                        this.emitter.emit("driverStanding", {
-                            driver: {
-                                driverId: standing.Driver.driverId,
-                                code: standing.Driver.code,
-                                firstName: standing.Driver.givenName,
-                                lastName: standing.Driver.familyName,
-                                nationality: standing.Driver.nationality,
-                                permanentNumber: standing.Driver.permanentNumber
-                            },
-                            position: parseInt(standing.position),
-                            points: parseFloat(standing.points),
-                            wins: parseInt(standing.wins)
-                        });
-                    });
-                    // 4. Get constructor standings
-                    const constructorStandingsData = await fetchData(`/${currentSeason}/constructorStandings`);
-                    const constructorStandings = constructorStandingsData.MRData.StandingsTable.StandingsLists[0]?.ConstructorStandings || [];
-                    constructorStandings.forEach((standing) => {
-                        this.emitter.emit("constructorStanding", {
-                            constructor: {
-                                constructorId: standing.Constructor.constructorId,
-                                name: standing.Constructor.name,
-                                nationality: standing.Constructor.nationality
-                            },
-                            position: parseInt(standing.position),
-                            points: parseFloat(standing.points),
-                            wins: parseInt(standing.wins)
-                        });
-                    });
-                    // 5. Get qualifying results
-                    const qualifyingData = await fetchData(`/${currentSeason}/${lastRound}/qualifying`);
-                    const qualifyingRace = qualifyingData.MRData.RaceTable.Races[0];
-                    if (qualifyingRace) {
-                        this.emitter.emit("qualifying", {
-                            season: currentSeason,
-                            round: parseInt(qualifyingRace.round),
-                            raceName: qualifyingRace.raceName,
-                            circuit: {
-                                circuitId: qualifyingRace.Circuit.circuitId,
-                                name: qualifyingRace.Circuit.circuitName,
-                                location: qualifyingRace.Circuit.Location.locality,
-                                country: qualifyingRace.Circuit.Location.country,
-                                lat: parseFloat(qualifyingRace.Circuit.Location.lat),
-                                lng: parseFloat(qualifyingRace.Circuit.Location.long)
-                            },
-                            results: qualifyingRace.QualifyingResults.map((result) => ({
-                                position: parseInt(result.position),
-                                driver: {
-                                    driverId: result.Driver.driverId,
-                                    code: result.Driver.code,
-                                    firstName: result.Driver.givenName,
-                                    lastName: result.Driver.familyName,
-                                    nationality: result.Driver.nationality,
-                                    permanentNumber: result.Driver.permanentNumber
-                                },
-                                constructor: {
-                                    constructorId: result.Constructor.constructorId,
-                                    name: result.Constructor.name,
-                                    nationality: result.Constructor.nationality
-                                },
-                                q1: result.Q1 || undefined,
-                                q2: result.Q2 || undefined,
-                                q3: result.Q3 || undefined
-                            }))
-                        });
+                this.nextRace = {
+                    circuit: {
+                        circuitId: nextRaceData.circuit.id,
+                        name: nextRaceData.circuit.name,
+                        location: nextRaceData.circuit.location,
+                        country: nextRaceData.circuit.country,
+                        lat: parseFloat(nextRaceData.circuit.lat),
+                        lng: parseFloat(nextRaceData.circuit.lng)
+                    },
+                    schedule: {
+                        fp1: nextRaceData.sessions?.fp1 || "",
+                        fp2: nextRaceData.sessions?.fp2 || "",
+                        fp3: nextRaceData.sessions?.fp3 || "",
+                        sprint: nextRaceData.sessions?.sprint || undefined,
+                        qualifying: nextRaceData.sessions?.qualifying || "",
+                        race: nextRaceData.date || ""
                     }
-                }
+                };
+            }
+            // 2. Get last race results
+            const lastRaceData = await fetchData("/races/last/results");
+            if (lastRaceData && lastRaceData.race && lastRaceData.results) {
+                this.emitter.emit("raceResult", {
+                    season: lastRaceData.race.season,
+                    round: lastRaceData.race.round,
+                    raceName: lastRaceData.race.name,
+                    circuit: {
+                        circuitId: lastRaceData.race.circuit.id,
+                        name: lastRaceData.race.circuit.name,
+                        location: lastRaceData.race.circuit.location,
+                        country: lastRaceData.race.circuit.country,
+                        lat: parseFloat(lastRaceData.race.circuit.lat),
+                        lng: parseFloat(lastRaceData.race.circuit.lng)
+                    },
+                    results: lastRaceData.results.map((result) => ({
+                        position: result.position,
+                        driver: {
+                            driverId: result.driver.id,
+                            code: result.driver.code,
+                            firstName: result.driver.firstName,
+                            lastName: result.driver.lastName,
+                            nationality: result.driver.nationality,
+                            permanentNumber: result.driver.number
+                        },
+                        constructor: {
+                            constructorId: result.constructor.id,
+                            name: result.constructor.name,
+                            nationality: result.constructor.nationality
+                        },
+                        points: result.points,
+                        status: result.status,
+                        time: result.time,
+                        fastestLap: result.fastestLap ? {
+                            time: result.fastestLap.time,
+                            lap: result.fastestLap.lap
+                        } : undefined
+                    }))
+                });
+                this.lastRace = {
+                    results: lastRaceData.results.map((result) => ({
+                        position: result.position,
+                        driver: {
+                            driverId: result.driver.id,
+                            code: result.driver.code,
+                            firstName: result.driver.firstName,
+                            lastName: result.driver.lastName,
+                            nationality: result.driver.nationality,
+                            permanentNumber: result.driver.number
+                        },
+                        constructor: {
+                            constructorId: result.constructor.id,
+                            name: result.constructor.name,
+                            nationality: result.constructor.nationality
+                        },
+                        points: result.points,
+                        status: result.status,
+                        time: result.time,
+                        fastestLap: result.fastestLap ? {
+                            time: result.fastestLap.time,
+                            lap: result.fastestLap.lap
+                        } : undefined
+                    }))
+                };
+            }
+            // 3. Get driver standings
+            const driverStandingsData = await fetchData("/standings/drivers");
+            if (driverStandingsData && Array.isArray(driverStandingsData)) {
+                this.driverStandings = driverStandingsData.map((standing) => {
+                    this.emitter.emit("driverStanding", {
+                        driver: {
+                            driverId: standing.driver.id,
+                            code: standing.driver.code,
+                            firstName: standing.driver.firstName,
+                            lastName: standing.driver.lastName,
+                            nationality: standing.driver.nationality,
+                            permanentNumber: standing.driver.number
+                        },
+                        position: standing.position,
+                        points: standing.points,
+                        wins: standing.wins
+                    });
+                    return {
+                        driver: {
+                            driverId: standing.driver.id,
+                            code: standing.driver.code,
+                            firstName: standing.driver.firstName,
+                            lastName: standing.driver.lastName,
+                            nationality: standing.driver.nationality,
+                            permanentNumber: standing.driver.number
+                        },
+                        position: standing.position,
+                        points: standing.points,
+                        wins: standing.wins
+                    };
+                });
+            }
+            // 4. Get constructor standings
+            const constructorStandingsData = await fetchData("/standings/constructors");
+            if (constructorStandingsData && Array.isArray(constructorStandingsData)) {
+                this.constructorStandings = constructorStandingsData.map((standing) => {
+                    this.emitter.emit("constructorStanding", {
+                        constructor: {
+                            constructorId: standing.constructor.id,
+                            name: standing.constructor.name,
+                            nationality: standing.constructor.nationality
+                        },
+                        position: standing.position,
+                        points: standing.points,
+                        wins: standing.wins
+                    });
+                    return {
+                        constructor: {
+                            constructorId: standing.constructor.id,
+                            name: standing.constructor.name,
+                            nationality: standing.constructor.nationality
+                        },
+                        position: standing.position,
+                        points: standing.points,
+                        wins: standing.wins
+                    };
+                });
+            }
+            // 5. Get qualifying results
+            const qualifyingData = await fetchData("/races/last/qualifying");
+            if (qualifyingData && qualifyingData.race && qualifyingData.results) {
+                this.emitter.emit("qualifying", {
+                    season: qualifyingData.race.season,
+                    round: qualifyingData.race.round,
+                    raceName: qualifyingData.race.name,
+                    circuit: {
+                        circuitId: qualifyingData.race.circuit.id,
+                        name: qualifyingData.race.circuit.name,
+                        location: qualifyingData.race.circuit.location,
+                        country: qualifyingData.race.circuit.country,
+                        lat: parseFloat(qualifyingData.race.circuit.lat),
+                        lng: parseFloat(qualifyingData.race.circuit.lng)
+                    },
+                    results: qualifyingData.results.map((result) => ({
+                        position: result.position,
+                        driver: {
+                            driverId: result.driver.id,
+                            code: result.driver.code,
+                            firstName: result.driver.firstName,
+                            lastName: result.driver.lastName,
+                            nationality: result.driver.nationality,
+                            permanentNumber: result.driver.number
+                        },
+                        constructor: {
+                            constructorId: result.constructor.id,
+                            name: result.constructor.name,
+                            nationality: result.constructor.nationality
+                        },
+                        q1: result.q1,
+                        q2: result.q2,
+                        q3: result.q3
+                    }))
+                });
+                this.qualifyingResults = {
+                    results: qualifyingData.results.map((result) => ({
+                        position: result.position,
+                        driver: {
+                            driverId: result.driver.id,
+                            code: result.driver.code,
+                            firstName: result.driver.firstName,
+                            lastName: result.driver.lastName,
+                            nationality: result.driver.nationality,
+                            permanentNumber: result.driver.number
+                        },
+                        constructor: {
+                            constructorId: result.constructor.id,
+                            name: result.constructor.name,
+                            nationality: result.constructor.nationality
+                        },
+                        q1: result.q1,
+                        q2: result.q2,
+                        q3: result.q3
+                    }))
+                };
             }
         }
         catch (error) {
