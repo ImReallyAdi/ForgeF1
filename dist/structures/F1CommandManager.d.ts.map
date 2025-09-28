@@ -1,0 +1,1 @@
+{"version":3,"file":"F1CommandManager.d.ts","sourceRoot":"","sources":["../../src/structures/F1CommandManager.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,kBAAkB,EAAE,MAAM,uBAAuB,CAAC;AAC3D,OAAO,EAAE,SAAS,EAAE,MAAM,mBAAmB,CAAC;AAG9C,qBAAa,gBAAiB,SAAQ,kBAAkB,CACtD,MAAM,SAAS,CAChB;IACC,WAAW,SAAsB;CAClC"}

@@ -1,1 +1,44 @@
-[{"name":"create","version":"1.0.0","description":"Triggered when a branch or tag is created."},{"name":"delete","version":"1.0.0","description":"Triggered when a branch or tag is deleted."},{"name":"discussion","version":"1.0.0","description":"Triggered when a discussion event is received from GitHub."},{"name":"error","version":"1.0.0","description":"Emitted when an error occurs inside the GitHub webhook logic."},{"name":"fork","version":"1.0.0","description":"Triggered when a fork event is received from GitHub."},{"name":"issues","version":"1.0.0","description":"Triggered when an issue event is received from GitHub."},{"name":"issue_comment","version":"1.0.0","description":"Triggered when a comment is created on an issue or pull request."},{"name":"label","version":"1.0.0","description":"Triggered when a label is created, edited, or deleted."},{"name":"milestone","version":"1.0.0","description":"Triggered when a milestone is created, closed, opened, edited, or deleted."},{"name":"project","version":"1.0.0","description":"Triggered when a project is created, updated, or deleted."},{"name":"project_card","version":"1.0.0","description":"Triggered when a project card is created, moved, edited, or deleted."},{"name":"pull_request","version":"1.0.0","description":"Triggered when a pull request event is received from GitHub."},{"name":"pull_request_review","version":"1.0.0","description":"Triggered when a review is submitted on a pull request."},{"name":"push","version":"1.0.0","description":"Triggered when a push event is received from GitHub."},{"name":"release","version":"1.0.0","description":"Triggered when a release event is received from GitHub."},{"name":"repository","version":"1.0.0","description":"Triggered when a repository is created, renamed, archived, or transferred."},{"name":"star","version":"1.0.0","description":"Triggered when a star event is received from GitHub."}]
+[
+	{
+		"name": "raceWeekend",
+		"version": "1.0.0",
+		"description": "Emitted when a race weekend is upcoming or currently active. Payload contains circuit info and schedule (practice, qualifying, sprint, race).",
+		"examples": ["emit('raceWeekend', { circuit: {...}, schedule: {...} })"],
+		"scope": "extension"
+	},
+	{
+		"name": "raceResult",
+		"version": "1.0.0",
+		"description": "Emitted after a race completes with full race results (positions, drivers, constructors, points, fastest laps).",
+		"examples": ["emit('raceResult', { season: 2025, round: 10, results: [...] })"],
+		"scope": "extension"
+	},
+	{
+		"name": "qualifying",
+		"version": "1.0.0",
+		"description": "Emitted after qualifying results are available (Q1/Q2/Q3 times and final grid positions).",
+		"examples": ["emit('qualifying', { season: 2025, round: 10, results: [...] })"],
+		"scope": "extension"
+	},
+	{
+		"name": "driverStanding",
+		"version": "1.0.0",
+		"description": "Emitted when driver standings are updated. Payload contains driver info, position, points, and wins.",
+		"examples": ["emit('driverStanding', { driver: {...}, position: 1, points: 345 })"],
+		"scope": "extension"
+	},
+	{
+		"name": "constructorStanding",
+		"version": "1.0.0",
+		"description": "Emitted when constructor standings are updated. Payload contains constructor info, position, points, and wins.",
+		"examples": ["emit('constructorStanding', { constructor: {...}, position: 1, points: 512 })"],
+		"scope": "extension"
+	},
+	{
+		"name": "error",
+		"version": "1.0.0",
+		"description": "Emitted when an internal error occurs inside the extension.",
+		"examples": ["emit('error', new Error('...'))"],
+		"scope": "extension"
+	}
+]

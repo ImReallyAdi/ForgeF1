@@ -1,1 +1,74 @@
-[{"name":"$githubEventType","version":"1.0.0","description":"Returns the type of the latest GitHub event","brackets":false,"unwrap":false,"args":[],"output":["String"]},{"name":"$newComment","version":"1.0.0","description":"Returns a value from the new GitHub issue comment event payload","brackets":true,"args":[{"name":"property","rest":false,"type":"String","required":false,"description":"The property to retrieve from the comment payload"}],"unwrap":true,"output":["String"]},{"name":"$newCommit","version":"1.0.0","description":"Returns commit-related values from the latest push event payload.","brackets":true,"args":[{"name":"property","rest":false,"required":false,"description":"The property to retrieve from the latest commit (use commits[0].message, etc.).","type":"String"}],"unwrap":true,"output":["String"]},{"name":"$newCreate","version":"1.0.0","description":"Returns a value from the GitHub create (branch/tag) event payload","brackets":true,"args":[{"name":"property","rest":false,"type":"String","required":false,"description":"The property to retrieve from the create event payload"}],"unwrap":true,"output":["String"]},{"name":"$newDelete","version":"1.0.0","description":"Returns a value from the GitHub delete (branch/tag) event payload","brackets":true,"args":[{"name":"property","rest":false,"type":"String","required":false,"description":"The property to retrieve from the delete event payload"}],"unwrap":true,"output":["String"]},{"name":"$newDiscussion","version":"1.0.0","description":"Returns a value from the new GitHub discussion event payload.","brackets":true,"args":[{"name":"property","rest":false,"required":false,"description":"The property to retrieve from the discussion payload.","type":"String"}],"unwrap":true,"output":["String"]},{"name":"$newFork","version":"1.0.0","description":"Returns a value from the new GitHub fork event payload","brackets":true,"args":[{"name":"property","rest":false,"required":false,"description":"The property to retrieve from the fork payload","type":"String"}],"unwrap":true,"output":["String"]},{"name":"$newIssue","version":"1.0.0","description":"Returns a value from the new GitHub issues event payload.","brackets":true,"args":[{"name":"property","rest":false,"required":false,"description":"The property to retrieve from the issue payload.","type":"String"}],"unwrap":true,"output":["String"]},{"name":"$newLabel","version":"1.0.0","description":"Returns a value from the GitHub label event payload","brackets":true,"args":[{"name":"property","rest":false,"type":"String","required":false,"description":"The property to retrieve from the label event payload"}],"unwrap":true,"output":["String"]},{"name":"$newMilestone","version":"1.0.0","description":"Returns a value from the GitHub milestone event payload","brackets":true,"args":[{"name":"property","rest":false,"type":"String","required":false,"description":"The property to retrieve from the milestone event payload"}],"unwrap":true,"output":["String"]},{"name":"$newProject","version":"1.0.0","description":"Returns a value from the GitHub project event payload","brackets":true,"args":[{"name":"property","rest":false,"type":"String","required":false,"description":"The property to retrieve from the project event payload"}],"unwrap":true,"output":["String"]},{"name":"$newProjectCard","version":"1.0.0","description":"Returns a value from the GitHub project card event payload","brackets":true,"args":[{"name":"property","rest":false,"type":"String","required":false,"description":"The property to retrieve from the project card event payload"}],"unwrap":true,"output":["String"]},{"name":"$newPRReview","version":"1.0.0","description":"Returns a value from the new GitHub pull request review event payload","brackets":true,"args":[{"name":"property","rest":false,"type":"String","required":false,"description":"The property to retrieve from the PR review payload"}],"unwrap":true,"output":["String"]},{"name":"$newPullRequest","version":"1.0.0","description":"Returns a value from the new GitHub pull request event payload","brackets":true,"args":[{"name":"property","rest":false,"required":true,"description":"The property to retrieve from the pull request payload","type":"String"}],"unwrap":true,"output":["String"]},{"name":"$newPush","version":"1.0.0","description":"Returns a value from the new GitHub push event payload","brackets":true,"args":[{"name":"property","rest":false,"required":false,"description":"The property to retrieve from the push payload","type":"String"}],"unwrap":true,"output":["String"]},{"name":"$newRelease","version":"1.0.0","description":"Returns a value from the new GitHub release event payload.","brackets":true,"args":[{"name":"property","rest":false,"required":false,"description":"The property to retrieve from the release payload.","type":"String"}],"unwrap":true,"output":["String"]},{"name":"$newRepository","version":"1.0.0","description":"Returns a value from the GitHub repository event payload (e.g., rename)","brackets":true,"args":[{"name":"property","rest":false,"type":"String","required":false,"description":"The property to retrieve from the repository event payload"}],"unwrap":true,"output":["String"]},{"name":"$newStar","version":"1.0.0","description":"Returns a value from the new GitHub star event payload.","brackets":true,"args":[{"name":"property","rest":false,"required":false,"description":"The property to retrieve from the star payload.","type":"String"}],"unwrap":true,"output":["String"]},{"name":"$pushCommitCount","version":"1.0.0","description":"Returns the number of commits in the latest GitHub push event","brackets":false,"unwrap":false,"args":[],"output":["Number"]}]
+[
+	{
+		"name": "$lastRaceResults",
+		"version": "1.0.0",
+		"description": "Get the full results from the most recently completed F1 race (positions, drivers, constructors, points, times, fastest laps).",
+		"brackets": false,
+		"unwrap": true,
+		"args": [],
+		"examples": ["$lastRaceResults"],
+		"output": ["Json"]
+	},
+	{
+		"name": "$raceResults",
+		"version": "1.0.0",
+		"description": "Alias for $lastRaceResults. Returns the most recent race results.",
+		"brackets": false,
+		"unwrap": true,
+		"aliases": ["$lastRaceResults"],
+		"args": [],
+		"examples": ["$raceResults", "$lastRaceResults"],
+		"output": ["Json"]
+	},
+	{
+		"name": "$nextRace",
+		"version": "1.0.0",
+		"description": "Get basic information and schedule for the next/upcoming race weekend (circuit, practice/qualifying/race times).",
+		"brackets": false,
+		"unwrap": true,
+		"args": [],
+		"examples": ["$nextRace"],
+		"output": ["Json"]
+	},
+	{
+		"name": "$raceWeekend",
+		"version": "1.0.0",
+		"description": "Alias for $nextRace. Returns the upcoming race weekend schedule and circuit details.",
+		"brackets": false,
+		"unwrap": true,
+		"aliases": ["$nextRace"],
+		"args": [],
+		"examples": ["$raceWeekend", "$nextRace"],
+		"output": ["Json"]
+	},
+	{
+		"name": "$driverStandings",
+		"version": "1.0.0",
+		"description": "Returns the current driver standings (position, points, wins and driver details).",
+		"brackets": false,
+		"unwrap": true,
+		"args": [],
+		"examples": ["$driverStandings"],
+		"output": ["Json"]
+	},
+	{
+		"name": "$constructorStandings",
+		"version": "1.0.0",
+		"description": "Returns the current constructor standings (position, points, wins and constructor details).",
+		"brackets": false,
+		"unwrap": true,
+		"args": [],
+		"examples": ["$constructorStandings"],
+		"output": ["Json"]
+	},
+	{
+		"name": "$qualifyingResults",
+		"version": "1.0.0",
+		"description": "Returns qualifying results (Q1/Q2/Q3 times and grid positions) from the most recent qualifying session.",
+		"brackets": false,
+		"unwrap": true,
+		"args": [],
+		"examples": ["$qualifyingResults"],
+		"output": ["Json"]
+	}
+]

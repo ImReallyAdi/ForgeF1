@@ -1,4 +1,4 @@
-# ForgeScript F1 Events
+# ForgeScript F1 by adi.zip 
 
 This extension provides Formula 1 racing data and events for ForgeScript.
 
@@ -13,13 +13,14 @@ This extension provides Formula 1 racing data and events for ForgeScript.
 ## Installation
 
 ```bash
-npm install @
+npm i @adi.zip/forge.f1
+
 ```
 
 ## Usage
 
 ```typescript
-const { ForgeF1 } = require("@");
+const { ForgeF1 } = require("@adi.zip/forge.f1");
 
 // Initialize the F1 extension
 client.loadEtryforge/forge.f1xtension(
@@ -71,4 +72,6 @@ This extension uses the [Ergast Motor Racing Developer API](http://ergast.com/mr
 
 # Still in progess btw!
 
-## made w/ love adi
+## made w/ love imreallyadi
+
+**adi.zip studio**
