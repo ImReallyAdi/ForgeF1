@@ -68,7 +68,7 @@ Triggered when constructor standings are updated. Includes:
 - Constructor details
 
 ## Data Source
-This extension uses the [Ergast Motor Racing Developer API](http://ergast.com/mrd/) to fetch Formula 1 data. The API is free to use and does not require authentication.
+This extension uses the [f1api.dev](https://f1api.dev/api/) API to fetch Formula 1 data. The API is free to use and does not require authentication.
 
 # Still in progess btw!
 
