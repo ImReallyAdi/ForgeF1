@@ -3,9 +3,11 @@ import { ForgeF1 } from "..";
 
 export default new NativeFunction({
   name: "$raceWeekend",
+    version: "1.0.2",
   description: "Gets information about the upcoming race weekend",
   unwrap: true,
   brackets: false,
+  args: [],
   output: ArgType.Json,
   execute(ctx, args) {
     const ext = ctx.client.getExtension(ForgeF1, true);
